@@ -6,7 +6,7 @@ const options = {
     openapi: "3.0.0",
     info: {
       version: "1.0.0",
-      title: "개발이 취미인 남자",
+      title: "CheckTrack",
       description:
         "API",
     },
