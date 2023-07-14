@@ -11,15 +11,28 @@ var connection = mysql.createConnection({
 connection.connect();
 
 router
-    .get("/user_list", (req, res) => {
-        
+    .get("/get-user-entity", (req, res) => {
+        console.log("GET USER ENTITY");
+        const userNo = req.query.userNo;
+        //console.log(userNo);
+        connection.query('SELECT * FROM userTable WHERE userNo = ?', [userNo], function (error, rows) {
+            if(error) throw error;
+            if(rows.length==1){
+                res.status(200).json(rows[0]);
+            }else{
+                res.status(401);
+            }
+        });
     })
-    .post("/login", (req, res) => {
-        
+    .get("/get-group-user-no-list", (req, res) => {
+        console.log("GET GROUP USER LIST");
+        const groupNo = req.query.groupNo;
+        console.log(groupNo);
+        connection.query('SELECT userNo FROM groupUserTable WHERE groupNo = ?', [groupNo], function (error, rows){
+            if(error) throw error;
+            res.status(200).json(rows);
+        });
     })
-    .post("/insert", (req, res) => {
-        
-    });
 
 
 module.exports = router;
