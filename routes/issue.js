@@ -11,7 +11,7 @@ var connection = mysql.createConnection({
 connection.connect();
 
 router
-    .get("get_group_issue_list", (req, res) => {
+    .get("/get-group-issue-list", (req, res) => {
         console.log("GET GROUP ISSUE LIST");
         const groupNo = req.query.groupNo;
         connection.query('SELECT * FROM issueTable WHERE issueGroupNo = ?', [groupNo], function (error, rows){
@@ -20,7 +20,14 @@ router
         });
     })
 
-
+    .get("/get-issue-entity", (req, res) => {
+        console.log("GET ISSUE ENTITY");
+        const issueNo = req.query.issueNo;
+        connection.query("SELECT * FROM issueTable WHERE issueNo = ?", [issueNo], function(error, rows){
+            if(error) throw error;
+            res.status(200).json(rows);
+        });
+    })
 
 
 module.exports = router;

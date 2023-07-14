@@ -25,7 +25,7 @@ router
         });
     })
     .get("/get-group-user-no-list", (req, res) => {
-        console.log("GET GROUP USER LIST");
+        console.log("GET GROUP USER NO LIST");
         const groupNo = req.query.groupNo;
         console.log(groupNo);
         connection.query('SELECT userNo FROM groupUserTable WHERE groupNo = ?', [groupNo], function (error, rows){
