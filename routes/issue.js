@@ -29,5 +29,19 @@ router
         });
     })
 
+    .post("/post-issue-entity", (req, re) => {
+        console.log("POST ISSUE ENTITY");
+        const issueTitle = req.body.issueTitle;
+        const issueContext = req.body.issueContext;
+        const issueUserNo = req.body.issueUserNo;
+        const issueDate = req.body.issueDate;
+        const issueGroupNo = req.body.issueGroupNo;
+        connection.query("INSERT INTO issueTable(issueTitle, issueContext, issueUserNo, issueDate, issueGroupNo, issueCommentNum) VALUES (?, ?, ?, ?, ?, 0)", 
+        [issueTitle, issueContext, issueUserNo, issueDate, issueGroupNo], function(error, rows){
+            if(error) throw error;
+            res.status(200).json(rows);
+        });
+    })
+
 
 module.exports = router;
