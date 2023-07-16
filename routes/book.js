@@ -35,7 +35,22 @@ router
             }
         })
     })
-    
+    .get("/get-reading-book-no-list", (req, res) => {
+        console.log("GET READING BOOK LIST");
+        const userNo = req.query.userNo;
+        connection.query('SELECT bookNo FROM userBookTable WHERE userNo = ? AND bookType = \'Reading\'', [userNo], function(error, rows){
+            if(error) throw error;
+            res.status(200).json(rows);
+        })
+    })
+    .get("/get-will-read-book-no-list", (req, res) => {
+        console.log("GET WILL READ BOOK LIST");
+        const userNo = req.query.userNo;
+        connection.query('SELECT bookNo FROM userBookTable WHERE userNo = ? AND bookType = \'WillRead\'', [userNo], function(error, rows){
+            if(error) throw error;
+            res.status(200).json(rows);
+        })
+    })
 
 
 
