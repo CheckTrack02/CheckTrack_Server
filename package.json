@@ -19,7 +19,9 @@
   "homepage": "https://github.com/CheckTrack02/CheckTrack_Server#readme",
   "dependencies": {
     "express": "^4.18.2",
-    "mysql": "^2.18.1"
+    "moment": "^2.29.4",
+    "mysql": "^2.18.1",
+    "socket.io": "^4.7.1"
   },
   "devDependencies": {
     "swagger-jsdoc": "^6.2.8",
