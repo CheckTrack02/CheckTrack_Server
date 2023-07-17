@@ -29,7 +29,7 @@ router
         });
     })
 
-    .post("/post-issue-entity", (req, re) => {
+    .post("/post-issue-entity", (req, res) => {
         console.log("POST ISSUE ENTITY");
         const issueTitle = req.body.issueTitle;
         const issueContext = req.body.issueContext;

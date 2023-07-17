@@ -15,7 +15,7 @@ const server = http.createServer(app);
 
 const socketIO = require("socket.io");
 const moment = require("moment");
-const io = socketIO(server);
+const io = socketIO(server, {'pingInterval' : 5000, 'pingTimeout' : 10000});
 
 
 app.use(express.json({
@@ -30,7 +30,7 @@ app.use('/group', groupRoute);
 app.use('/book', bookRoute);
 app.use('/issue', issueRoute);
 app.use('/comment', commentRoute);
-app.use('/userBook', userBookRoute);
+app.use('/user-book', userBookRoute);
 
 
 
@@ -55,6 +55,7 @@ io.on("connection", (socket)=>{
         console.log(data.startTime);
         console.log(data.bookNo)
     })
+    //socket.onDisconnect((_) => print('disconnect'));
 })
 
 const PORT = 443;
