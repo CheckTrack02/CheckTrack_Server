@@ -15,8 +15,8 @@ router
         console.log("GET USER BOOK ENTITY");
         const userNo = req.query.userNo;
         const bookNo = req.query.bookNo;
-        console.log(userNo);
-        console.log(bookNo);
+        //console.log(userNo);
+        //console.log(bookNo);
         connection.query('SELECT * FROM userBookTable WHERE userNo = ? AND bookNo = ?', [userNo, bookNo], function (error, rows){
             if(rows.length==1) res.status(200).json(rows[0]);
             else res.status(401);
@@ -34,7 +34,7 @@ router
             if(error){
                 throw error;
             }else{
-                return res.status(200);
+                return res.status(200).json(rows);
             }
         })
     })

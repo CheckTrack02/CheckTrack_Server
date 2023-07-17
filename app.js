@@ -32,6 +32,9 @@ app.use('/issue', issueRoute);
 app.use('/comment', commentRoute);
 app.use('/user-book', userBookRoute);
 
+/*  Socket IO */
+
+var socketMap = new Map();
 
 
 io.on("connection", (socket)=>{
@@ -51,9 +54,17 @@ io.on("connection", (socket)=>{
     })
     socket.on("timer-startTimer", (data) => {
         console.log("timer-startTimer");
-        console.log(data.userNo);
-        console.log(data.startTime);
-        console.log(data.bookNo)
+        const userNo = data.userNo;
+        const bookNo = data.bookNo;
+        const startTime = data.startTime;
+        const roomName = "room" + bookNo.toString();
+        socket.join(roomName);
+        
+
+        console.log("Client " + socket.id + " joined " + roomName);
+    })
+    socket.on('disconnect', function(){
+        console.log("SOCKETIO disconnect EVENT: ", socket.id, " client disconnected");
     })
     //socket.onDisconnect((_) => print('disconnect'));
 })

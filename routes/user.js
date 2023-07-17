@@ -36,6 +36,18 @@ router
             }
         });
     })
+    .get("/get-id-user-entity", (req, res) => {
+        console.log("GET ID USER ENTITY");
+        const userId = req.query.userId;
+        connection.query('SELECT * FROM userTable WHERE userId = \' ? \'', [userId], function (error, rows){
+            if(error)   throw error;
+            if(rows.length==1){
+                res.status(200).json(rows[0]);
+            }else{
+                res.status(401);
+            }
+        });
+    })
     .get("/get-group-user-no-list", (req, res) => {
         console.log("GET GROUP USER NO LIST");
         const groupNo = req.query.groupNo;
