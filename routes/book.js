@@ -54,7 +54,8 @@ router
     .get("/get-search-book-entity", (req, res) => {
         console.log("GET SEARCH BOOK LIST");
         const bookSearch = req.query.bookSearch;
-        connection.query('SELECT * FROM bookTable WHERE bookName LIKE \'%?%\'', [bookSearch], function(error, rows){
+        console.log(bookSearch);
+        connection.query("SELECT * FROM bookTable WHERE bookName LIKE '%" + bookSearch + "%'", [bookSearch], function(error, rows){
             if(error) throw error;
             res.status(200).json(rows);
         })

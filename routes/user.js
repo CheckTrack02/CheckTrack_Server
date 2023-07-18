@@ -70,6 +70,21 @@ router
             }
         });
     })
+    .post("/user-get-group-list-user-no-list", (req, res) => {
+        console.log("USER GET GROUP LIST USER NO LIST");
+        const groupList = req.body.groupList;
+        console.log(groupList);
+        var groupListString = "(";
+        for(var i=0; i<groupList.length; i++){
+            groupListString = groupListString + groupList[i].toString() + ", ";
+        }
+        groupListString = groupListString + "NULL)";
+        console.log(groupListString);
+        connection.query('SELECT userNo FROM groupUserTable WHERE groupNo IN ' + groupListString, function(error, rows){
+            if(error)   throw error;
+            res.status(200).json(rows);
+        });
+    })
 
 
 module.exports = router;

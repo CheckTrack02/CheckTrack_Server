@@ -38,26 +38,26 @@ router
         const groupBookNo = req.body.groupBookNo;
         const groupStartDate = req.body.groupStartDate;
         const groupEndDate = req.body.groupEndDate;
-        const userList = req.body.userList;
         connection.query("INSERT INTO groupTable(groupName, groupBookNo, groupStartDate, groupEndDate) VALUES (?, ?, ?, ?)", 
-        [groupName, groupBookNo, groupStartDate, groupEndDate], function(error, groupRows){
+        [groupName, groupBookNo, groupStartDate, groupEndDate], function(error, rows){
             if(error) throw error;
-            for (userNo in userList){
-                connection.query("INSERT INTO groupUserTable(groupNo, userNo, userPage, userTime) VALUES (?, ?, 0, 0)",
-                [groupRows.groupNo, userNo], function(error, rows){
-                    if(error) throw error;
-                    connection.query("INSERT INTO userBookTable(userNo, bookNo, userPage, userTime, bookType) VALUES (?, ?, 0, 0, \"WillRead\")",
-                        [userNo, groupBookNo], function(error, rows){
-                            if(error) throw error;
-                            res.status(200).json(rows);
-                        });
-                });
-            }
-            
+            res.status(200).json(rows);
         });
     })
-
-
-
+    .post("post-group-user", (req, res) => {
+        console.log("POST GROUP USER");
+        const groupNo = req.body.groupNo;
+        const groupBookNo = req.body.groupBookNo;
+        const userNo = req.body.userNo;
+        connection.query("INSERT INTO groupUserTable(groupNo, userNo, userPage, userTime) VALUES (?, ?, 0, 0)",
+        [groupNo, userNo], function(error, rows){
+            if(error) throw error;
+            connection.query("INSERT INTO userBookTable(userNo, bookNo, userPage, userTime, bookType) VALUES (?, ?, 0, 0, \"WillRead\")",
+            [userNo, groupBookNo], function(error, rows){
+                if(error) throw error;
+                res.status(200).json(rows);
+            });
+        });
+})
 
 module.exports = router;
