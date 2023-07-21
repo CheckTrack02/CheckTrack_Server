@@ -32,19 +32,25 @@ router
             res.status(200).json(rows);
         });
     })
-    .post("post-group-entity", (req, res) => {
+    .post("/post-group-entity", (req, res) => {
         console.log("POST GROUP");
         const groupName = req.body.groupName;
         const groupBookNo = req.body.groupBookNo;
-        const groupStartDate = req.body.groupStartDate;
-        const groupEndDate = req.body.groupEndDate;
+        const [syear,smonth, sday] = req.body.groupStartDate.split('-');
+        const groupStartDate = new Date(+syear, +smonth - 1, +sday);
+        const [eyear,emonth, eday] = req.body.groupEndDate.split('-');
+        const groupEndDate = new Date(+eyear, +emonth - 1, +eday);
+
         connection.query("INSERT INTO groupTable(groupName, groupBookNo, groupStartDate, groupEndDate) VALUES (?, ?, ?, ?)", 
         [groupName, groupBookNo, groupStartDate, groupEndDate], function(error, rows){
             if(error) throw error;
-            res.status(200).json(rows);
+            console.log(rows.insertId);
+            res.status(200).json({
+                groupNo: rows.insertId,
+            });
         });
     })
-    .post("post-group-user", (req, res) => {
+    .post("/post-group-user", (req, res) => {
         console.log("POST GROUP USER");
         const groupNo = req.body.groupNo;
         const groupBookNo = req.body.groupBookNo;
@@ -52,11 +58,19 @@ router
         connection.query("INSERT INTO groupUserTable(groupNo, userNo, userPage, userTime) VALUES (?, ?, 0, 0)",
         [groupNo, userNo], function(error, rows){
             if(error) throw error;
-            connection.query("INSERT INTO userBookTable(userNo, bookNo, userPage, userTime, bookType) VALUES (?, ?, 0, 0, \"WillRead\")",
+            connection.query("SELECT * FROM userBookTable WHERE userNo = ? AND bookNo = ? ",
             [userNo, groupBookNo], function(error, rows){
                 if(error) throw error;
-                res.status(200).json(rows);
+                if (rows.length == 0){
+                    connection.query("INSERT INTO userBookTable(userNo, bookNo, userPage, userTime, bookType) VALUES (?, ?, 0, 0, \"WillRead\")",
+                    [userNo, groupBookNo], function(error, rows){
+                        if(error) throw error;
+                        res.status(200).json(rows);
+                    });
+                }
+                else res.status(200).json(rows);
             });
+            
         });
 })
 

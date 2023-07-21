@@ -4,6 +4,7 @@ const app = express();
 const port = 80;
 const userRoute = require('./routes/user');
 const loginRoute = require('./routes/login');
+const signupRoute = require('./routes/signup');
 const groupRoute = require('./routes/group');
 const bookRoute = require('./routes/book');
 const issueRoute = require('./routes/issue');
@@ -26,6 +27,7 @@ app.listen(port, () => console.log('80번 포트에서 대기중'));
 
 app.use('/user', userRoute);
 app.use('/login', loginRoute);
+app.use('/signup', signupRoute);
 app.use('/group', groupRoute);
 app.use('/book', bookRoute);
 app.use('/issue', issueRoute);
@@ -76,6 +78,7 @@ io.on("connection", (socket)=>{
         socketUserNameMap.set(socket.id, userName);
         const bookNo = data.bookNo;
         const startTime = data.startTime;
+        console.log(userName + " " + startTime);
         const roomNo = bookNo;
         socketRoomNoMap.set(socket.id, roomNo);
         const roomName = "room" + roomNo.toString();
@@ -182,12 +185,15 @@ io.on("connection", (socket)=>{
         roomUserPageMap.set(roomNo, roomUserPageList);
         roomStartTimeMap.set(roomNo, roomStartTimeList);
     })
-    socket.on('timer-updateBookPage', function(data){
+    socket.on('timer-updateBookPage', (data) => {
         const userName = socketUserNameMap.get(socket.id);
+        console.log(userName);
         const userPage = data.userPage;
+        console.log(userPage);
         const userTime = data.userTime;
         const startTime = data.startTime;
         const roomNo = socketRoomNoMap.get(socket.id);
+        
         const roomName = "room" + roomNo.toString();
         const roomUserNameList = roomUserNameMap.get(roomNo);
         const roomUserTimeList = roomUserTimeMap.get(roomNo);
@@ -210,7 +216,6 @@ io.on("connection", (socket)=>{
                 break;
             }
         }
-
     })
 })
 

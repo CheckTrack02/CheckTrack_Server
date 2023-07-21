@@ -37,9 +37,10 @@ router
         });
     })
     .get("/get-id-user-entity", (req, res) => {
+        console.log(req.query.userId);
         console.log("GET ID USER ENTITY");
         const userId = req.query.userId;
-        connection.query('SELECT * FROM userTable WHERE userId = \' ? \'', [userId], function (error, rows){
+        connection.query('SELECT * FROM userTable WHERE userId = ?', [userId], function (error, rows){
             if(error)   throw error;
             if(rows.length==1){
                 res.status(200).json(rows[0]);
